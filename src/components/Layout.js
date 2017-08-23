@@ -1,5 +1,5 @@
 import React from 'react'
-import { Route, Switch } from 'react-router-dom'
+import { Route, Switch, Redirect } from 'react-router-dom'
 import { requireAuth } from '../utils/AuthService'
 
 import Callback from './Callback'
@@ -13,7 +13,14 @@ const Layout = () => (
     <div>
       <Switch>
         <Route exact path='/' component={ListMovie} />
-        <Route path='/create' component={CreateMovie} onEnter={requireAuth} />
+
+        <Route path='/create' render={() => (
+          requireAuth()
+            ? <CreateMovie />
+            : <Redirect to={{
+              pathname: '/'
+            }} />
+        )} />
         <Route path='/callback' component={Callback} />
       </Switch>
     </div>

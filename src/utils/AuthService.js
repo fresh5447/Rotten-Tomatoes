@@ -1,7 +1,6 @@
 import decode from 'jwt-decode'
 import auth0 from 'auth0-js'
 const ID_TOKEN_KEY = 'id_token'
-
 const CLIENT_ID = process.env.REACT_APP_AUTH_CLIENT_ID
 const CLIENT_DOMAIN = process.env.REACT_APP_AUTH_CLIENT_DOMAIN
 const REDIRECT = 'http://localhost:3000/callback'
@@ -31,7 +30,9 @@ export function logout () {
 
 export function requireAuth (nextState, replace) {
   if (!isLoggedIn()) {
-    replace({pathname: '/'})
+    return false
+  } else {
+    return true
   }
 }
 

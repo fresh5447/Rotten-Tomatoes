@@ -7,9 +7,9 @@ import {compose} from 'recompose'
 
 class Callback extends Component {
 
-  componentDidMount() {
-    getAndStoreParameters();
-    this.createUser();
+  componentDidMount () {
+    getAndStoreParameters()
+    this.createUser()
   }
 
   createUser = () => {
@@ -18,12 +18,11 @@ class Callback extends Component {
       email: getEmail(),
       name: getName()
     }
-
     this.props.createUser({ variables })
       .then((response) => {
           console.log("Response from create user", response);
           localStorage.setItem('userId', response.data.createUser.id);
-          //FIX
+          //FIX to user history or location via rrouter4
           window.location = '/'
       }).catch((e) => {
         console.error("Error of life ", e)

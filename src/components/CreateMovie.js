@@ -3,7 +3,6 @@ import { withRouter } from 'react-router-dom'
 import {compose} from 'recompose'
 import { graphql } from 'react-apollo'
 import gql from 'graphql-tag'
-import Nav from './Nav'
 
 class CreateMovie extends React.Component {
 
@@ -16,7 +15,6 @@ class CreateMovie extends React.Component {
   render () {
     return (
       <div>
-        <Nav />
         <h3 className="text-center"> Add Rotten Movie Ratings!</h3>
         <hr/>
         <div className='w-100 pa4 flex justify-center'>
