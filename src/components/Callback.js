@@ -12,12 +12,13 @@ class Callback extends Component {
   }
 
   createUser = () => {
+    console.log("CREATING USER")
     const variables = {
       idToken: getIdToken(),
       email: getEmail(),
       name: getName()
     }
-
+    console.log("VARIABLES", variables)
     this.props.createUser({ variables })
       .then((response) => {
           console.log("Response from create user", response);
