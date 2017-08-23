@@ -2,7 +2,6 @@ import React from 'react'
 import DisplayMovie from './DisplayMovie'
 import { graphql } from 'react-apollo'
 import gql from 'graphql-tag'
-import Nav from './Nav'
 
 class ListMovie extends React.Component {
   render () {
@@ -12,7 +11,6 @@ class ListMovie extends React.Component {
 
     return (
       <div>
-        <Nav />
         <h3 className='text-center'> Latest Rotten Movie Ratings!</h3>
         <hr />
         <div className='col-sm-12'>

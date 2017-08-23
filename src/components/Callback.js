@@ -1,8 +1,9 @@
 import { Component } from 'react';
-import { withRouter } from 'react-router'
+import {withRouter} from 'react-router-dom'
 import { getAndStoreParameters, getIdToken, getEmail, getName } from '../utils/AuthService';
 import { graphql } from 'react-apollo'
 import gql from 'graphql-tag'
+import {compose} from 'recompose'
 
 class Callback extends Component {
 
@@ -22,10 +23,12 @@ class Callback extends Component {
       .then((response) => {
           console.log("Response from create user", response);
           localStorage.setItem('userId', response.data.createUser.id);
-          this.props.router.replace('/')
+          //FIX
+          window.location = '/'
       }).catch((e) => {
         console.error("Error of life ", e)
-        this.props.router.replace('/')
+        //FIX
+        window.location = '/'
       })
   }
 
@@ -50,6 +53,10 @@ const userQuery = gql`
   }
 `
 
-export default graphql(createUser, {name: 'createUser'})(
-  graphql(userQuery, { options: { fetchPolicy: 'network-only' }})(withRouter(Callback))
+const enhancer = compose(
+  graphql(createUser, {name: 'createUser'}),
+  graphql(userQuery, { options: { fetchPolicy: 'network-only' }}),
+  withRouter
 )
+
+export default enhancer(Callback)

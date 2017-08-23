@@ -1,8 +1,9 @@
 import React from 'react'
-import { withRouter } from 'react-router'
+import { withRouter } from 'react-router-dom'
+import {compose} from 'recompose'
 import { graphql } from 'react-apollo'
 import gql from 'graphql-tag'
-import Nav from './Nav';
+import Nav from './Nav'
 
 class CreateMovie extends React.Component {
 
@@ -77,11 +78,17 @@ const addMutation = gql`
   }
 `
 
-export default graphql(addMutation, {
-  props: ({ ownProps, mutate }) => ({
-    addMovie: ({ description, imageUrl, avgRating }) =>
-      mutate({
-        variables: { description, imageUrl, avgRating },
-      })
-  })
-})(withRouter(CreateMovie))
+
+const enhancer = compose(
+  graphql(addMutation, {
+    props: ({ ownProps, mutate }) => ({
+      addMovie: ({ description, imageUrl, avgRating }) =>
+        mutate({
+          variables: { description, imageUrl, avgRating },
+        })
+    })
+  }),
+  withRouter
+)
+
+export default enhancer(CreateMovie)

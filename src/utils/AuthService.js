@@ -1,5 +1,4 @@
 import decode from 'jwt-decode'
-import { browserHistory } from 'react-router'
 import auth0 from 'auth0-js'
 const ID_TOKEN_KEY = 'id_token'
 
@@ -26,7 +25,8 @@ export function login () {
 export function logout () {
   clearIdToken()
   clearProfile()
-  browserHistory.push('/')
+  // browserHistory.push('/') FIX
+  window.location = '/'
 }
 
 export function requireAuth (nextState, replace) {
