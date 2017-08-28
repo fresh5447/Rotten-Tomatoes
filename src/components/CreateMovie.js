@@ -22,6 +22,7 @@ class CreateMovie extends React.Component {
           <div style={{ maxWidth: 400 }} className=''>
 
             <label> Movie Title: </label>
+            
             <input
               className='w-100 pa3 mv2'
               value={this.state.description}
@@ -45,7 +46,7 @@ class CreateMovie extends React.Component {
             />
 
             {this.state.imageUrl &&
-              <img src={this.state.imageUrl} role='presentation' className='w-100 mv3' />
+              <img src={this.state.imageUrl} alt='Image Not Found' className='w-100 mv3' />
             }
             {this.state.description && this.state.imageUrl &&
               <button className='btn btn-info btn-lg' onClick={this.handleMovie}>Add New Movie</button>
@@ -60,9 +61,10 @@ class CreateMovie extends React.Component {
     const {description, imageUrl, avgRating} = this.state
     this.props.addMovie({ description, imageUrl, avgRating })
       .then(() => {
-        this.props.router.push('/')
+        window.location = "/"
     })
   }
+
 }
 
 const addMutation = gql`

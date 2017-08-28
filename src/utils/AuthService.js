@@ -12,7 +12,7 @@ var auth = new auth0.WebAuth({
   domain: CLIENT_DOMAIN
 })
 
-export function login () {
+export const login = () => {
   auth.authorize({
     responseType: 'id_token',
     redirectUri: REDIRECT,
@@ -21,14 +21,14 @@ export function login () {
   })
 }
 
-export function logout () {
+export const logout = () => {
   clearIdToken()
   clearProfile()
   // browserHistory.push('/') FIX
   window.location = '/'
 }
 
-export function requireAuth (nextState, replace) {
+export const requireAuth = (nextState, replace) => {
   if (!isLoggedIn()) {
     return false
   } else {
@@ -36,21 +36,21 @@ export function requireAuth (nextState, replace) {
   }
 }
 
-export function getIdToken () {
+export const getIdToken = () => {
   return localStorage.getItem(ID_TOKEN_KEY)
 }
 
-function clearIdToken () {
+const clearIdToken = () => {
   localStorage.removeItem(ID_TOKEN_KEY)
 }
 
-function clearProfile () {
+const clearProfile = () => {
   localStorage.removeItem('profile')
   localStorage.removeItem('userId')
 }
 
 // Helper function that will allow us to extract the id_token
-export function getAndStoreParameters () {
+export const getAndStoreParameters = () => {
   auth.parseHash(window.location.hash, function (err, authResult) {
     if (err) {
       return console.log(err)
@@ -60,30 +60,27 @@ export function getAndStoreParameters () {
   })
 }
 
-export function getEmail () {
-  return getProfile().email
-}
+export const getEmail = () =>
+  getProfile().email
 
-export function getName () {
-  return getProfile().nickname
-}
+export const getName = () =>
+  getProfile().nickname
 
 // Get and store id_token in local storage
-function setIdToken (idToken) {
+const setIdToken = (idToken) =>
   localStorage.setItem(ID_TOKEN_KEY, idToken)
-}
 
-export function isLoggedIn () {
+export const isLoggedIn = () => {
   const idToken = getIdToken()
   return !!idToken && !isTokenExpired(idToken)
 }
 
-export function getProfile () {
+export const getProfile = () => {
   const token = decode(getIdToken())
   return token
 }
 
-function getTokenExpirationDate (encodedToken) {
+const getTokenExpirationDate = (encodedToken) => {
   const token = decode(encodedToken)
   if (!token.exp) { return null }
 
@@ -93,7 +90,7 @@ function getTokenExpirationDate (encodedToken) {
   return date
 }
 
-function isTokenExpired (token) {
+const isTokenExpired = (token) => {
   const expirationDate = getTokenExpirationDate(token)
   return expirationDate < new Date()
 }

@@ -18,6 +18,7 @@ class Callback extends Component {
       email: getEmail(),
       name: getName()
     }
+    console.log(variables, "CREATE USER VARS")
     this.props.createUser({ variables })
       .then((response) => {
           console.log("Response from create user", response);
