@@ -15,6 +15,9 @@ Note: App needs to be of type "Regular Web Application" so we can use `HSA256` a
 
 Todo: Find out why 🤓
 
+Using Auth0Lock
+Change back to SPA type, keep HSA256
+
 For basic React Router 3 setup, checkout branch `react-router@3`
 
 This branch uses `React Router v4` which requires a slightly different setup.

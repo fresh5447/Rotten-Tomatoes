@@ -13,7 +13,7 @@ class Nav extends Component {
         <ul className='nav navbar-nav'>
           <li>
             <Link to='/'>All Movie Ratings</Link>
-
+            <Link to='/login'>Launch Lock</Link>
           </li>
           <li>
             {
