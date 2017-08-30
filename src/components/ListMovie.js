@@ -1,7 +1,9 @@
 import React from 'react'
 import DisplayMovie from './DisplayMovie'
+import { withRouter } from 'react-router-dom'
 import { graphql } from 'react-apollo'
 import gql from 'graphql-tag'
+import {compose} from 'recompose'
 
 class ListMovie extends React.Component {
   render () {
@@ -33,5 +35,17 @@ const FeedQuery = gql`query allMovies {
     avgRating
   }
 }`
+const userQuery = gql`
+  query userQuery {
+    user {
+      id
+    }
+  }
+`
 
-export default graphql(FeedQuery)(ListMovie)
+const enhancer = compose(
+  graphql(userQuery, { options: { fetchPolicy: 'network-only' }}),
+  graphql(FeedQuery),
+  withRouter
+)
+export default enhancer(ListMovie)

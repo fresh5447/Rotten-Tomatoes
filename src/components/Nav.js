@@ -12,20 +12,11 @@ class Nav extends Component {
         </div>
         <ul className='nav navbar-nav'>
           <li>
-            <Link to='/'>All Movie Ratings</Link>
-            <Link to='/login'>Launch Lock</Link>
-          </li>
-          <li>
-            {
-              (isLoggedIn()) ? <Link to='/create'>Add Movies</Link> : ''
-            }
-          </li>
-        </ul>
-        <ul className='nav navbar-nav navbar-right'>
-          <li>
-            {
-              (isLoggedIn()) ? (<button className='btn btn-danger log' onClick={() => logout()}>Log out </button>) : (<button className='btn btn-info log' onClick={() => login()}>Log In</button>)
-            }
+            <Link to='/'>Home</Link>
+            <Link className='btn btn-secondary' to='/login'>Login</Link>
+            <Link to='/create-movie'>Create Movie</Link>
+            <Link to='/movie-list'>Movie List</Link>
+            <button onClick={this.props.logout}> Logout </button>
           </li>
         </ul>
       </nav>

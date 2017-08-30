@@ -10,18 +10,22 @@ import Nav from './Nav'
 const clientId = process.env.REACT_APP_AUTH_CLIENT_ID
 const domain = process.env.REACT_APP_AUTH_CLIENT_DOMAIN
 
+
+
 class Layout extends Component {
-  componentDidMount() {
-    console.log('heres your stuff', clientId, domain)
+
+  // Both the below functions work equally well at knowing if there is a user logged in
+  isLoggedInViaGraphCool = () => {
+    console.log("DOES GRAPH COOL THINK WE ARE LOGGED IN?", this.props.data.user)
+
   }
 
-  isLoggedIn = () => {
-    console.log("IS LOGGED IN RESULT", this.props.data.user)
-    return this.props.data.user
+  isLoggedInViaJustLocallyStoredToken = () => {
+    const tokenResult = window.localStorage.getItem('auth0IdToken') === null ? false : true
+    console.log("DOES LOCAL STORAGE THINK WE ARE LOGGED IN?", tokenResult)
   }
 
-  isLoggedInViaGraphCool = () =>
-    this.props.data.user ? true : false
+
 
   logout = () => {
     window.localStorage.removeItem('auth0IdToken')
@@ -29,24 +33,30 @@ class Layout extends Component {
   }
 
   render () {
+    this.isLoggedInViaGraphCool()
+    this.isLoggedInViaJustLocallyStoredToken()
     if(this.props.data.loading) {
       return (<div>Loading..</div>)
     } else {
       return (
         <div>
-        <h1>{this.isLoggedIn() ? 'Logged In' : 'Logged Out'} </h1>
           <Nav logout={this.logout}  />
           <div>
             <Switch>
-              <Route exact path='/' component={ListMovie} />
+              <Route exact path='/' component={() => (
+                <div>
+                  <h4> Home Page </h4>
+                </div>
+              )} />
+              <Route exact path='/movie-list' component={ListMovie} />
               <Route exact path='/login' render={() => (
                 <LoginAuth0
-                        clientId={clientId}
-                        domain={domain}
-                      />
+                  clientId={clientId}
+                  domain={domain}
+                />
               )} />
               <Route exact path='/create-movie' render={() => (
-                this.isLoggedIn()
+                this.isLoggedInViaGraphCool()
                 ? <CreateMovie />
                 : <LoginAuth0
                         clientId={clientId}

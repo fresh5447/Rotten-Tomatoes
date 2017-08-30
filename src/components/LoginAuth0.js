@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react'
-import Auth0Lock from 'auth0-lock'
 import { withRouter } from 'react-router-dom'
 import {compose} from 'recompose'
+import Auth0Lock from 'auth0-lock'
 import { graphql, gql } from 'react-apollo'
 
 
@@ -12,21 +12,29 @@ import { graphql, gql } from 'react-apollo'
 // }
 
 
-class LoginAuth0 extends Component {
 
+class LoginAuth0 extends Component {
   constructor(props) {
     super(props)
     this.lock = new Auth0Lock(this.props.clientId, this.props.domain)
   }
 
 
+  // Notice the fetch profile from Auth0
+  // You can not store the access token in local storage
+  // to call later.
   componentDidMount() {
     this.lock.on('authenticated', (authResult) => {
       window.localStorage.setItem('auth0IdToken', authResult.idToken)
+      console.log('FIRST PART OF SOME SHIT', authResult)
       this.lock.getUserInfo(authResult.accessToken, (error, profile) => {
         if (error) {
           console.error('error authenitcating', error)
+          return error
         } else {
+          // Once you add a hook that adds a role to a user upon signin
+          // it will show up as an additional property app_metadata
+          console.log(profile, "HERE IS THE USER PROFILE")
           this.initiateCreateUser(authResult.idToken, profile)
         }
       })
@@ -38,9 +46,13 @@ class LoginAuth0 extends Component {
   }
 
   initiateCreateUser = (token, profile) => {
-    if(this.props.data.user || window.localStorage.getItem('auth0IdToken') === null) {
+    // redirect if user is logged in or did not finish Auth0 Lock dialog
+    // this.props.data.user || window.localStorage.getItem('auth0IdToken') === null
+    // This is the condition in the example ^
+    // But if there is a token, doesn't that mean there is a user?
+    if(this.props.data.user || window.localStorage.getItem('auth0IdToken') !== null ) {
       alert("not a new user")
-      return
+      this.props.history.replace('/')
     } else {
       // In the Database graphcool knows the Auth0 ID
       // which looks like this: auth0|59a5dee6f453001022dc08ae
@@ -54,6 +66,7 @@ class LoginAuth0 extends Component {
 
       this.props.createUser({ variables })
         .then((response) => {
+            alert("Successfully created a new user")
             this.props.history.replace('/')
         }).catch((e) => {
           console.error(e)
@@ -97,8 +110,8 @@ const userQuery = gql`
 `
 
 const enhancer = compose(
-  graphql(userQuery, { options: { fetchPolicy: 'network-only' }}),
   graphql(createUser, {name: 'createUser'}),
+  graphql(userQuery, { options: { fetchPolicy: 'network-only' }}),
   withRouter
 )
 export default enhancer(LoginAuth0)
