@@ -17,12 +17,13 @@ class Layout extends Component {
   // Both the below functions work equally well at knowing if there is a user logged in
   isLoggedInViaGraphCool = () => {
     console.log("DOES GRAPH COOL THINK WE ARE LOGGED IN?", this.props.data.user)
-
+    return this.props.data.user ? true : false
   }
 
   isLoggedInViaJustLocallyStoredToken = () => {
     const tokenResult = window.localStorage.getItem('auth0IdToken') === null ? false : true
     console.log("DOES LOCAL STORAGE THINK WE ARE LOGGED IN?", tokenResult)
+    return tokenResult
   }
 
 
@@ -33,8 +34,6 @@ class Layout extends Component {
   }
 
   render () {
-    this.isLoggedInViaGraphCool()
-    this.isLoggedInViaJustLocallyStoredToken()
     if(this.props.data.loading) {
       return (<div>Loading..</div>)
     } else {
@@ -58,6 +57,14 @@ class Layout extends Component {
               <Route exact path='/create-movie' render={() => (
                 this.isLoggedInViaGraphCool()
                 ? <CreateMovie />
+                : <LoginAuth0
+                        clientId={clientId}
+                        domain={domain}
+                      />
+              )} />
+              <Route exact path='/test-route' render={() => (
+                this.isLoggedInViaJustLocallyStoredToken()
+                ? <h1>Congrats, you are logged in </h1>
                 : <LoginAuth0
                         clientId={clientId}
                         domain={domain}
